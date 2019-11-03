@@ -1,6 +1,9 @@
-City1 east=City2
-City2 west=City1 south=City4
-City3 north=City1
-City4 north=City2 west=City3 east=City5 south=City6
-City5
-City6
+Amsterdam east=Berlin
+Berlin south=Bern
+Dublin east=London
+London east=Paris west=Bublin
+Paris north=Amsterdam east=Bern south=Madrid west=London
+Bern east=Rome west=Paris
+Rome
+Madrid north=Paris
+Lisbon north=Madrid

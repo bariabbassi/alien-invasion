@@ -2,7 +2,10 @@ package main
 
 import (
 	"errors"
+	"math/rand"
+	"strconv"
 	"strings"
+	"time"
 )
 
 ////////////////////////////// City /////////////////////////////////////////////////
@@ -33,6 +36,24 @@ func (w *World) RoadsString() string {
 		str += "\n"
 	}
 	return str
+}
+
+//AliensString converts aliens to a string
+func (w *World) AliensString() string {
+	var str string
+	str += "Aliens:\n"
+	for city, aliensInCity := range w.aliens {
+		str += city.name + " <=< "
+		for _, alienID := range aliensInCity {
+			str += "Alien" + strconv.Itoa(alienID) + " "
+		}
+		str += "\n"
+	}
+	return str
+}
+
+func (w *World) String() string {
+	return w.RoadsString() + w.AliensString()
 }
 
 //AddCity addds the city
@@ -83,4 +104,18 @@ func (w *World) FillWorld(fileLines []string) error {
 		}
 	}
 	return nil
+}
+
+//AddAlien adds an alien to a city
+func (w *World) AddAlien(alienID int, c City) {
+	w.aliens[c] = append(w.aliens[c], alienID)
+}
+
+//AddAliens adds N aliens to random cities
+func (w *World) AddAliens(N int) {
+	rand.Seed(time.Now().Unix())
+	for alienID := 1; alienID < N+1; alienID++ {
+		randomCity := w.cities[rand.Intn(len(w.cities))]
+		w.AddAlien(alienID, randomCity)
+	}
 }

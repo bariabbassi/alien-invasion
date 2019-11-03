@@ -5,7 +5,7 @@ Alien invasion :alien: is a fun little simulation of an alien invasion.
 - Required: ```Go 1.11+```
 - Clone this director within your ```gopath```.
 ```
-go install github.com/bariabbassi/aliens
+go install github.com/bariabbassi/alien-invasion
 aliens [N]
 ```
 - Replace ```[N]``` with a number between 1 and 100 in the previous line.
@@ -26,11 +26,10 @@ aliens [N]
 - The 4 directions north, east, south, and west are considered equal and are all just meaningless tags. A road is defined only by its origin and destination cities. This makes the world a UNWEIGHTED directed graph (state machine) with the roads being the arcs connecting the nodes (cities).
 
 ## Overview of the project
-- ```file.txt``` consists of lines containing the name of a city followed by neighboring cities.
+- ```file.txt``` consists of lines containing each the name of a city followed by neighboring cities. These are the 2 first lines of the file.
 ```
 Amsterdam east=Berlin
 Berlin south=Bern
-…
 ```
 
 This is what ```file.txt``` would look like visually.

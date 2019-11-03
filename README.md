@@ -1,4 +1,4 @@
-# Aliens invasion
+# Alien invasion
 Alien invasion :alien: is a fun little simulation of an alien invasion.
 
 ## How to run the project

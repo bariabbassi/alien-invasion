@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -13,6 +14,11 @@ import (
 //City defines a node of the world
 type City struct {
 	name string
+}
+
+//Equals compares 2 cities
+func (city *City) Equals(c City) bool {
+	return city.name == c.name
 }
 
 ////////////////////////////// World /////////////////////////////////////////////////
@@ -64,6 +70,65 @@ func (w *World) AddCity(c City) {
 //AddRoad destroys the road c1 --> c2
 func (w *World) AddRoad(c1, c2 City) {
 	w.roads[c1] = append(w.roads[c1], c2)
+}
+
+//DestroyCity destroys the city
+func (w *World) DestroyCity(c City) {
+	len := len(w.cities)
+	i := 0
+
+	//Find the index of the city
+	for i < len {
+		if w.cities[i].Equals(c) {
+			break
+		}
+		i++
+	}
+
+	//Delte the city at the index i
+	if i != len {
+		w.cities[i] = w.cities[len-1]
+		w.cities[len-1] = City{}
+		w.cities = w.cities[:len-1]
+	}
+
+	//When a city is distroyed the roads from and to to city get destroyed too
+	w.DestroyRoads(c)
+
+	//the aliens in the city are killed aswell
+	w.aliens[c] = nil
+}
+
+//DestroyRoad deletes the road c1 --> c2
+func (w *World) DestroyRoad(c1, c2 City) {
+	len := len(w.roads[c1])
+	i := 0
+
+	//Find the index of the road
+	for i < len {
+		if w.roads[c1][i].Equals(c2) {
+			break
+		}
+		i++
+	}
+
+	//Delete the road at the index i
+	if i != len {
+		w.roads[c1][i] = w.roads[c1][len-1]
+		w.roads[c1][len-1] = City{}
+		w.roads[c1] = w.roads[c1][:len-1]
+	}
+}
+
+//DestroyRoads deletes all the roads from and to c <-->
+func (w *World) DestroyRoads(c City) {
+	//delete all roads to c <--
+	for _, c2 := range w.roads[c] {
+		w.DestroyRoad(c2, c)
+	}
+
+	//delete all the roads from c -->
+	delete(w.roads, c)
 }
 
 //FillWorld fills the world with fileLines
@@ -118,4 +183,63 @@ func (w *World) AddAliens(N int) {
 		randomCity := w.cities[rand.Intn(len(w.cities))]
 		w.AddAlien(alienID, randomCity)
 	}
+}
+
+//Fight finds cities with more than 1 alien, kills them and destroys the city
+func (w *World) Fight() string {
+	var str string
+	for city, aliensInCity := range w.aliens {
+
+		//More than 1 alien in a city
+		if len(aliensInCity) > 1 {
+			str += city.name + " has been destroyed by "
+			for _, alienID := range aliensInCity {
+				str += "Alien" + strconv.Itoa(alienID) + " "
+			}
+
+			//DestroyCity() destroys the city and kills aliens in the city
+			w.DestroyCity(city)
+
+			//Print the phrase : CityX has been destroyed by AlienY and AlienZ
+			fmt.Println(str)
+			str = ""
+		}
+	}
+	return str
+}
+
+//MoveAliens moves each alien to a new city
+func (w *World) MoveAliens() {
+	rand.Seed(time.Now().Unix())
+
+	//A new aliens map is filed and replaces the old aliens map
+	newAliens := make(map[City][]int)
+
+	//Fill the new aliens map
+	for city, aliensInCity := range w.aliens {
+		if aliensInCity != nil {
+
+			//Aliens stuck in a city stay in the same city
+			if len(w.roads[city]) == 0 {
+
+				//His next city is the same city
+				nextCity := city
+
+				//Copy alien to the new aliens map
+				newAliens[nextCity] = append(newAliens[nextCity], aliensInCity[0])
+
+				//Aliens that are not stuck go to the next random city
+			} else {
+
+				//Pick a random road
+				nextCity := w.roads[city][rand.Intn(len(w.roads[city]))]
+
+				//Copy alien to the new aliens map
+				newAliens[nextCity] = append(newAliens[nextCity], aliensInCity[0])
+			}
+		}
+	}
+
+	//Replace the old aliens map with the new aliens map
+	w.aliens = newAliens
 }

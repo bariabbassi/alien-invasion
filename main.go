@@ -44,5 +44,17 @@ func main() {
 	//Add N aliens to a random city
 	w.AddAliens(N)
 
+	//If more than 1 alien is added to a city they fight
+	w.Fight()
+
+	//Move aliens until they get in a fight or get stuck
+	counter := 0
+	for len(w.aliens) > 0 && counter < 10001 {
+		w.MoveAliens()
+		w.Fight()
+		counter++
+	}
+
+	fmt.Println()
 	fmt.Print(w)
 }

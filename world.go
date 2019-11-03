@@ -187,29 +187,29 @@ func (w *World) AddAliens(N int) {
 
 //Fight finds cities with more than 1 alien, kills them and destroys the city
 func (w *World) Fight() string {
-	var str string
+	var output string
 	for city, aliensInCity := range w.aliens {
 
 		//More than 1 alien in a city
 		if len(aliensInCity) > 1 {
-			str += city.name + " has been destroyed by "
+			output += city.name + " has been destroyed by "
 			for _, alienID := range aliensInCity {
-				str += "Alien" + strconv.Itoa(alienID) + " "
+				output += fmt.Sprintf("Alien%d ", alienID)
 			}
 
 			//DestroyCity() destroys the city and kills aliens in the city
 			w.DestroyCity(city)
 
 			//Print the phrase : CityX has been destroyed by AlienY and AlienZ
-			fmt.Println(str)
-			str = ""
+			output += "\n"
 		}
 	}
-	return str
+	return output
 }
 
 //MoveAliens moves each alien to a new city
-func (w *World) MoveAliens() {
+func (w *World) MoveAliens() string {
+	var output string
 	rand.Seed(time.Now().Unix())
 
 	//A new aliens map is filed and replaces the old aliens map
@@ -220,7 +220,7 @@ func (w *World) MoveAliens() {
 		if aliensInCity != nil {
 			if len(w.roads[city]) == 0 { //Aliens stuck in a city die
 
-				fmt.Printf("Alien%d died trapped in %s\n", aliensInCity[0], city.name)
+				output += fmt.Sprintf("Alien%d is stuck in %s\n", aliensInCity[0], city.name)
 
 			} else { //Aliens that are not stuck go to the next random city
 
@@ -235,6 +235,7 @@ func (w *World) MoveAliens() {
 
 	//Replace the old aliens map with the new aliens map
 	w.aliens = newAliens
+	return output
 }
 
 //CreateFileLines converts roads to the same format as the file

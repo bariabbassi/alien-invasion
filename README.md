@@ -6,7 +6,7 @@ Alien invasion :alien: is a fun little simulation of an alien invasion.
 - Clone this director within your ```gopath```.
 ```
 go install github.com/bariabbassi/alien-invasion
-aliens [N]
+alien-invasion [N]
 ```
 - Replace ```[N]``` with a number between 1 and 100 in the previous line.
 
@@ -62,5 +62,9 @@ type World struct {
 ```
 ```world.go``` contains all the functions needed to perform the flow of actions needed in ```main.go```. The functions can, for example, add and delete cities, roads, and aliens.
 
-
-
+## Testing
+By using the command
+```
+go test
+```
+you can test the whole flow of actions in ```main.go```. However, please not that there isn't a unit test function for every function from ```world.go``` individually. The test proves the general function of the project with the 1 file included in the project ```file.txt```. Unit testing should be done with an array of different files.

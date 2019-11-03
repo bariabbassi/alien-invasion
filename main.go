@@ -47,7 +47,8 @@ func main() {
 	w := new(World)
 
 	//Fill the world
-	if w.FillWorld(fileLines) != nil {
+	err = w.FillWorld(fileLines)
+	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
@@ -59,14 +60,20 @@ func main() {
 	fmt.Println("** OH NO! ALIENS ARE EVERYWHERE!!! **")
 	fmt.Println("*************************************")
 
+	var outputMove string
+	var outputFight string
+
 	//If more than 1 alien is added to a city they fight
-	w.Fight()
+	outputFight = w.Fight()
+	fmt.Print(outputFight)
 
 	//Move aliens until they get in a fight or get stuck
 	counter := 0
 	for len(w.aliens) > 0 && counter < 10001 {
-		w.MoveAliens()
-		w.Fight()
+		outputMove = w.MoveAliens()
+		fmt.Print(outputMove)
+		outputFight = w.Fight()
+		fmt.Print(outputFight)
 		counter++
 	}
 	fmt.Println()

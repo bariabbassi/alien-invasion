@@ -218,18 +218,11 @@ func (w *World) MoveAliens() {
 	//Fill the new aliens map
 	for city, aliensInCity := range w.aliens {
 		if aliensInCity != nil {
+			if len(w.roads[city]) == 0 { //Aliens stuck in a city die
 
-			//Aliens stuck in a city stay in the same city
-			if len(w.roads[city]) == 0 {
+				fmt.Printf("Alien%d died trapped in %s\n", aliensInCity[0], city.name)
 
-				//His next city is the same city
-				nextCity := city
-
-				//Copy alien to the new aliens map
-				newAliens[nextCity] = append(newAliens[nextCity], aliensInCity[0])
-
-				//Aliens that are not stuck go to the next random city
-			} else {
+			} else { //Aliens that are not stuck go to the next random city
 
 				//Pick a random road
 				nextCity := w.roads[city][rand.Intn(len(w.roads[city]))]
@@ -242,4 +235,22 @@ func (w *World) MoveAliens() {
 
 	//Replace the old aliens map with the new aliens map
 	w.aliens = newAliens
+}
+
+//CreateFileLines converts roads to the same format as the file
+func (w *World) CreateFileLines() []string {
+	var fileLines []string
+	var str string
+
+	//The directions are considered as just a meaningless tags
+	directions := []string{" north=", " east=", " south=", " west="}
+	for _, c1 := range w.cities {
+		str += c1.name
+		for i, c2 := range w.roads[c1] {
+			str += directions[i] + c2.name
+		}
+		fileLines = append(fileLines, str)
+		str = ""
+	}
+	return fileLines
 }

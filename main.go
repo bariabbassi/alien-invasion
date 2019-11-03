@@ -54,7 +54,9 @@ func main() {
 		w.Fight()
 		counter++
 	}
-
 	fmt.Println()
-	fmt.Print(w)
+
+	//Print what the file would look like now
+	newFileLines := w.CreateFileLines()
+	PrintFile(newFileLines)
 }

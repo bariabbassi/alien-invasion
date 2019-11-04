@@ -34,13 +34,13 @@ Berlin south=Bern
 
 This is what ```file.txt``` would look like visually.
 ```
-          Amsterdam -----> Berlin
-              |              |
-Dublin ----> Paris <------> Bern <-----> Rome
-              |
-            Madrid
-              |
-            Lisbon
+                          Amsterdam -----> Berlin
+                               |             |
+Dublin <----> London <-----> Paris <------> Bern -----> Rome
+                               |
+                            Madrid
+                               |
+                            Lisbon
 ```
 
 - ```io.go``` contains the 2 functions that read and print the file ```file.txt```. The name ```io``` stands for input and output.

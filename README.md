@@ -1,5 +1,5 @@
-# Alien invasion
-Alien invasion :alien: is a fun little simulation of an alien invasion.
+# :alien: Alien invasion
+Alien invasion is a fun little simulation of an alien invasion.
 
 ## How to run the project
 - Required: ```Go 1.11+```
